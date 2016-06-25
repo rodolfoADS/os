@@ -8,6 +8,7 @@ package com.os.telas;
 import java.sql.*;
 import com.os.dal.Conexao;
 import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
 /**
  *
  * @author rafael
@@ -48,11 +49,37 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     txtCliEmail.setText(null);
                 }
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+        
         }
         
-    }
+        private void pesquisar_cliente(){
+            String sql = "select * from tbClientes where nomeCli like ?";
+            try {
+                pst = conexao.prepareStatement(sql);
+                
+                pst.setString(1, txtCliPesquisar.getText() + "%");
+                rs=pst.executeQuery();
+                
+                tblClientes.setModel(DbUtils.resultSetToTableModel(rs));
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+
+            }
+        }
+        
+        public void setar_campos(){
+            int setar = tblClientes.getSelectedRow();
+            txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+            txtCliEndereco.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
+            txtCliFone.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
+            txtCliEmail.setText(tblClientes.getModel().getValueAt(setar, 4).toString());
+            
+            
+        }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -114,6 +141,12 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         btnRemover.setToolTipText("Excluir");
         btnRemover.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
+        txtCliPesquisar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCliPesquisarKeyReleased(evt);
+            }
+        });
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/os/icones/1466912208_Magnifier.png"))); // NOI18N
         jLabel6.setToolTipText("Pesquisar");
 
@@ -128,6 +161,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblClientes);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -179,9 +217,9 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jLabel5)
                 .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtCliPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(txtCliPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
@@ -217,6 +255,16 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         adicionar();
     }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void txtCliPesquisarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCliPesquisarKeyReleased
+        // TODO add your handling code here:
+        pesquisar_cliente();
+    }//GEN-LAST:event_txtCliPesquisarKeyReleased
+
+    private void tblClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientesMouseClicked
+        // TODO add your handling code here:
+        setar_campos();
+    }//GEN-LAST:event_tblClientesMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
