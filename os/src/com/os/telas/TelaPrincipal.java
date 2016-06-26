@@ -76,6 +76,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         MenCadOs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.ALT_MASK));
         MenCadOs.setText("OS");
+        MenCadOs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenCadOsActionPerformed(evt);
+            }
+        });
         MenCad.add(MenCadOs);
 
         MenCadUsu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.ALT_MASK));
@@ -196,6 +201,13 @@ public class TelaPrincipal extends javax.swing.JFrame {
         cliente.setVisible(true);
         Desktop.add(cliente);
     }//GEN-LAST:event_MenCadCliActionPerformed
+
+    private void MenCadOsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenCadOsActionPerformed
+        // TODO add your handling code here:
+        TelaOs os=new TelaOs();
+        os.setVisible(true);
+        Desktop.add(os);
+    }//GEN-LAST:event_MenCadOsActionPerformed
 
     /**
      * @param args the command line arguments
