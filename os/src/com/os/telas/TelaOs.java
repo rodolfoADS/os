@@ -114,6 +114,68 @@ public class TelaOs extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, e);
         }
     }
+    
+    private void alterar(){
+        
+        String sql = "update tbOs set equipamento=?, defeito=?, servico=?, tecnico=?, valor=100 where os=?";
+        
+        try {
+            pst=conexao.prepareStatement(sql);
+            pst.setString(1, txtOsEquip.getText());
+            pst.setString(2, txtOsDef.getText());
+            pst.setString(3, txtOsServ.getText());
+            pst.setString(4, txtOsTec.getText());
+            pst.setString(5, txtOsValor.getText());
+            pst.setString(5, txtOs.getText());
+            
+            if ((txtOsEquip.getText().isEmpty()||txtOsDef.getText().isEmpty())) {
+
+                JOptionPane.showMessageDialog(null, "Preencha todos os campos obrigatórios");
+
+            } else {
+                
+                int adicionado = pst.executeUpdate();
+                
+                if(adicionado>0){
+                    JOptionPane.showMessageDialog(null, "OS alterada!");
+                    txtOsEquip.setText(null);
+                    txtOsDef.setText(null);
+                    txtOsServ.setText(null);
+                    txtOsTec.setText(null);
+                    txtOsValor.setText(null);
+                }
+                
+            }
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    private void remover(){
+        int confirma = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja excluir essa OS?");
+        if(confirma==JOptionPane.YES_OPTION){
+            String sql = "delete from tbOs where os=?";
+            try {
+                pst=conexao.prepareStatement(sql);
+                pst.setString(1, txtOs.getText());
+                int apagado = pst.executeUpdate();
+                if(apagado>0){
+                    JOptionPane.showMessageDialog(null, "OS excluída");
+                    txtOsEquip.setText(null);
+                    txtOsDef.setText(null);
+                    txtOsServ.setText(null);
+                    txtOsTec.setText(null);
+                    txtOsValor.setText(null);
+                    
+                    btnOsAdicionar.setEnabled(true);
+                }
+            } catch (Exception e) {
+                
+            }
+        }
+    }
         
     /**
      * This method is called from within the constructor to initialize the form.
@@ -346,10 +408,20 @@ public class TelaOs extends javax.swing.JInternalFrame {
         btnOsAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/os/icones/update.png"))); // NOI18N
         btnOsAlterar.setToolTipText("Alterar OS");
         btnOsAlterar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnOsAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOsAlterarActionPerformed(evt);
+            }
+        });
 
         btnOsExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/os/icones/delete.png"))); // NOI18N
         btnOsExcluir.setToolTipText("Excluir OS");
         btnOsExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnOsExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOsExcluirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -484,6 +556,16 @@ public class TelaOs extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         consultar();
     }//GEN-LAST:event_btnOsPesquisarActionPerformed
+
+    private void btnOsAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOsAlterarActionPerformed
+        // TODO add your handling code here:
+        alterar();
+    }//GEN-LAST:event_btnOsAlterarActionPerformed
+
+    private void btnOsExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOsExcluirActionPerformed
+        // TODO add your handling code here:
+        remover();
+    }//GEN-LAST:event_btnOsExcluirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
